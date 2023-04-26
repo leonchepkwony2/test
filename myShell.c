@@ -10,15 +10,13 @@ int main(void)
 {
 	char *input;
 	char *args[MAX_INPUT / 2 + 1];
-	int status;
+	int status, num_args;
 	pid_t pid;
-	int num_args;
 
 	while (1)
 	{
 		display_prompt();
 		fflush(stdout);
-
 		input = (char *)malloc(sizeof(char) * MAX_INPUT);
 		if (_fgets(input, MAX_INPUT, stdin) == NULL)
 		{
@@ -33,17 +31,11 @@ int main(void)
 			num_args++;
 			args[num_args] = strtok(NULL, " \n");
 		}
-
 		if (num_args > 0 && _strcmp(args[0], "exit") == 0)
-		{
 			exit(0);
-		}
-
 		pid = fork();
 		if (pid < 0)
-		{
 			perror("Error forking");
-		}
 		else if (pid == 0)
 		{
 			execvp(args[0], args);
@@ -51,9 +43,7 @@ int main(void)
 			exit(1);
 		}
 		else
-		{
 			waitpid(pid, &status, 0);
-		}
 		free(input);
 	}
 	return (0);
