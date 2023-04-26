@@ -50,7 +50,7 @@ int _getchar(void)
 	static char buf[BUFSIZ];
 	static char *bufp = buf;
 	int n = 0;
-	
+
 	if (n == 0)
 	{
 		n = read(0, buf, sizeof(buf));
@@ -70,7 +70,7 @@ int _getchar(void)
 int _strcmp(const char *str1, const char *str2)
 {
 	int i = 0;
-	
+
 	while (str1[i] != '\0' && str2[i] != '\0')
 	{
 		if (str1[i] != str2[i])
