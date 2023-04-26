@@ -10,16 +10,15 @@
  *         If end-of-file occurs before any characters are read, the function
  *         returns NULL and the buffer contents remain unchanged.
  */
-
-char* _fgets(char* str, int num, FILE* stream)
+char *_fgets(char *str, int num, FILE *stream)
 {
-	char* result = fgets(str, num, stream);
-	
+	char *result = fgets(str, num, stream);
+
 	if (result == NULL)
 		return (NULL);
 
-	char* newline_pos = _strchr(str, '\n');
-	
+	char *newline_pos = _strchr(str, '\n');
+
 	if (newline_pos != NULL)
 	{
 		*newline_pos = '\0';
@@ -27,8 +26,11 @@ char* _fgets(char* str, int num, FILE* stream)
 	else
 	{
 		int c;
-		
-		while ((c = _getchar()) != '\n' && c != EOF);
+
+		while ((c = _getchar()) != '\n' && c != EOF)
+		{
+		}
 	}
-	return str;
+
+	return (str);
 }
