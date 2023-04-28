@@ -1,44 +1,54 @@
-#include "myShell.h"
+#include "shell.h"
+
+extern char **environ;
+
 
 /**
- * _putchar - writes the character c to stdout
- * @c: The character to print
- * Return: on Success 1
+ * main - Entry point for the shell program.
+ *
+ * Return: 0 on success
  */
-int _putchar(char c)
+int main(void)
 {
-	return (write(1, &c, 1));
-}
-/**
- * display_prompt - clear screen for the first time and move cursor to top
- * Return: void
- */
-void display_prompt(void)
-{
-	static int first_time = 1;
-
-	if (first_time)
+	char cmd[MAX_CMD_LENGTH];
+	char *argv[] = {NULL, NULL};
+	int status;
+	
+	while (1)
 	{
-		const char* (CLEAR_SCREEN_ANSI) = "\e[1;1H\e[2J";
-
-		write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, _strlen(CLEAR_SCREEN_ANSI));
-		first_time = 0;
+		_putchar(PROMPT);
+		fflush(stdout);
+		if (_fgets(cmd, MAX_CMD_LENGTH, stdin) == NULL)
+		{
+			if (_feof(stdin))
+			{
+				_putchar('\n');
+				exit(EXIT_SUCCESS);
+			}
+			perror("fgets");
+			exit(EXIT_FAILURE);
+		}
+		cmd[_strcspn(cmd, "\n")] = '\0';
+		argv[0] = cmd;
+		pid_t pid = fork();
+		
+		if (pid == -1)
+		{
+			perror("fork");
+			exit(EXIT_FAILURE);
+		}
+		else if (pid == 0)
+		{
+			if (execve(cmd, argv, environ) == -1)
+			{
+				perror("execve");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			waitpid(pid, &status, 0);
+		}
 	}
-	char username[100], hostname[100];
-
-	getlogin_r(username, sizeof(username));
-	gethostname(hostname, sizeof(hostname));
-	for (int i = 0; i < _strlen(username); i++)
-	{
-		_putchar(username[i]);
-	}
-	_putchar('@');
-	for (int i = 0; i < strlen(hostname); i++)
-	{
-		_putchar(hostname[i]);
-	}
-	_putchar(':');
-	_putchar('~');
-	_putchar('$');
-	_putchar(' ');
+	return (0);
 }
