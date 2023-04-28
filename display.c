@@ -1,24 +1,19 @@
 /**
- * my_strcspn - get length of prefix
- * substring that doesn't contain specified characters
- * @s: string to search
- * @reject: string containing characters to exclude
+ * parse_args - Parse command line arguments.
+ * @cmd: The command line input string.
+ * @args: An array of strings to store the parsed arguments.
  *
- * Return: number of characters in s that do not occur in reject
+ * Return: The number of arguments parsed.
  */
-size_t _strcspn(const char *s, const char *reject)
+int parse_args(char *cmd, char **args)
 {
-	const char *p, *q;
+	int i = 0;
+	char *token = strtok(cmd, " ");
 	
-	for (p = s; *p; p++)
+	while (token != NULL)
 	{
-		for (q = reject; *q; q++)
-		{
-			if (*p == *q)
-			{
-				return (p - s);
-			}
-		}
+		args[i++] = token;
+		token = strtok(NULL, " ");
 	}
-	return (p - s);
+	return (i);
 }
